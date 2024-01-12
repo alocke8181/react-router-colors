@@ -1,23 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useState} from 'react';
+import { Routes, Route, Navigate } from 'react-router';
+import starterColors from './starterColors';
+import ColorList from './ColorList';
+import ColorForm from './ColorForm';
+import ColorFilter from './ColorFilter';
 
 function App() {
+
+  const [colors, setColors] = useState(starterColors);
+
+  const addColor = (name, url, color) =>{
+    setColors(colors => [{name, url, color}, ...colors,])
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Routes>
+        <Route exact path='/colors' element={<ColorList colors={colors}/>}/>
+        <Route path='/colors/new' element={<ColorForm addColor={addColor}/>} />
+        <Route path='/colors/:color' element={<ColorFilter colors={colors}/>} />
+        <Route path='*' element={<Navigate to={'/colors'} />}/>
+      </Routes>
     </div>
   );
 }
